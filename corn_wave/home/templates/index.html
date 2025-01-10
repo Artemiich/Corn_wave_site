@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corn Wave</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Corn Wave</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'corn_wave' %}">О группе</a></li>
+                <li><a href="{% url 'tours' %}">Туры</a></li>
+                <li><a href="{% url 'contact' %}">Контакты</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'profile_page' %}">Профиль</a></li>
+                    <li><a href="{% url 'Tracks' %}">Страница Треков</a></li>
+
+                {% else %}
+                    <li><a href="{% url 'registration' %}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="welcome">
+            <h2>Добро пожаловать!</h2>
+            <p>Здесь вы можете узнать все о нашей музыке и предстоящих турах.</p>
+        </section>
+        <section id="about">
+            <h2>О группе</h2>
+            <p>История и информация о нас.</p>
+        </section>
+        <section id="music">
+            <h2>Музыка</h2>
+            <p>Слушайте наши последние треки!</p>
+        </section>
+        <section id="tour">
+            <h2>Туры</h2>
+            <p>Посетите наши ближайшие концерты.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Corn Wave. Все права защищены.</p>
+    </footer>
+</body>
+</html>
+
+
+

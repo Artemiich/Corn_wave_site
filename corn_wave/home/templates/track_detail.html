@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ track.title }}</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .track-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .track-details {
+            margin-bottom: 15px;
+        }
+        .track-actions {
+            text-align: right;
+        }
+        .like-btn, .dislike-btn {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .like-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .like-btn:hover {
+            background-color: #0056b3;
+        }
+        .dislike-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .dislike-btn:hover {
+            background-color: #c82333;
+        }
+        .comments-section {
+            margin-top: 30px;
+        }
+        .comment-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Детали трека</h1>
+    <div class="track-item">
+        <div class="track-details">
+            <h2 class="track-title">{{ track.title }}</h2>
+            <p class="track-artist">Исполнитель: {{ track.artist.name }}</p>
+            {% if track.album %}
+                <p class="track-album">Альбом: {{ track.album.title }}</p>
+            {% endif %}
+            <p class="track-genre">Жанр: {{ track.genre.name }}</p>
+            <p class="track-duration">Длительность: {{ track.duration }}</p>
+
+            {% if track.audio_file %}
+                <audio class="track-audio" controls>
+                    <source src="{{ track.audio_file.url }}" type="audio/mpeg">
+                    Ваш браузер не поддерживает аудиоэлемент.
+                </audio>
+            {% else %}
+                <p class="track-missing">Аудиофайл не найден.</p>
+            {% endif %}
+        </div>
+        <div class="track-actions">
+            <!-- Лайки -->
+            <p>Лайков: {{ track.total_likes }}</p>
+            {% if track.user_liked %}
+                <a href="{% url 'remove_like' track.id %}" class="like-btn">Убрать лайк</a>
+            {% else %}
+                <a href="{% url 'add_like' track.id %}" class="like-btn">Поставить лайк</a>
+            {% endif %}
+
+            <!-- Дизлайки -->
+            <p>Дизлайков: {{ track.total_dislikes }}</p>
+            {% if track.user_disliked %}
+                <a href="{% url 'remove_dislike' track.id %}" class="dislike-btn">Убрать дизлайк</a>
+            {% else %}
+                <a href="{% url 'add_dislike' track.id %}" class="dislike-btn">Поставить дизлайк</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="comments-section">
+        <h2>Комментарии</h2>
+        {% for comment in track.comments.all %}
+            <div class="comment-item">
+                <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                <p><em>Дата: {{ comment.created_at }}</em></p>
+            </div>
+        {% empty %}
+            <p>Комментариев пока нет.</p>
+        {% endfor %}
+    </div>
+
+    <form action="{% url 'add_comment' track.id %}" method="post">
+        {% csrf_token %}
+        <textarea name="content" rows="3" required placeholder="Добавить комментарий..."></textarea><br>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <a href="{% url 'Tracks' %}">← Назад к списку треков</a>
+</body>
+</html>

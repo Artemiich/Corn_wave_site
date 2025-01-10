@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты поиска</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 10px;
+            font-size: 1em;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-btn {
+            padding: 10px 15px;
+            font-size: 1em;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
+        .track-list {
+            list-style: none;
+            padding: 0;
+        }
+        .track-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .track-details {
+            max-width: 70%;
+        }
+        .track-title-link {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .track-title-link:hover {
+            color: #0056b3;
+        }
+        .no-results {
+            text-align: center;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Результаты поиска</h1>
+    <!-- Форма поиска -->
+    <form method="get" action="{% url 'search_results' %}" class="search-form">
+        <input type="text" name="q" class="search-input" placeholder="Введите название трека, жанра или исполнителя" value="{{ query }}">
+        <button type="submit" class="search-btn">Поиск</button>
+    </form>
+
+    {% if tracks %}
+        <h2>Найдено треков, жанров, альбомов: {{ tracks|length }}</h2>
+        <ul class="track-list">
+            {% for track in tracks %}
+                <li class="track-item">
+                    <div class="track-details">
+                        <h3 class="track-title">
+                            <a href="{% url 'track_detail' track.id %}" class="track-title-link">
+                                {{ track.title }}
+                            </a>
+                        </h3>
+                        <p class="track-artist">Исполнитель: {{ track.artist.name }}</p>
+                        {% if track.album %}
+                            <p class="track-album">Альбом: {{ track.album.title }}</p>
+                        {% endif %}
+                        <p class="track-genre">Жанр: {{ track.genre.name }}</p>
+                        <p class="track-duration">Длительность: {{ track.duration }}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-results">По вашему запросу ничего не найдено.</p>
+    {% endif %}
+</body>
+</html>

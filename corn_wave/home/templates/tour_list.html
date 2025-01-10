@@ -1,0 +1,120 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список туров</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 10px;
+            font-size: 1em;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-btn {
+            padding: 10px 15px;
+            font-size: 1em;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
+        .tour-list {
+            list-style: none;
+            padding: 0;
+        }
+        .tour-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .tour-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .tour-description {
+            margin-bottom: 10px;
+        }
+        .tour-location,
+        .tour-date,
+        .tour-duration {
+            margin-bottom: 5px;
+        }
+        .cart-btn {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9em;
+            background-color: #28a745;
+            color: white;
+        }
+        .cart-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список туров</h1>
+    <!-- Форма поиска -->
+
+
+    <ul class="tour-list">
+        <li class="tour-item">
+            <div class="tour-title">Тур по Европе</div>
+            <p class="tour-description">Насладитесь культурой и историей Европы с нашим незабываемым туром.</p>
+            <p class="tour-location">Место: Европа</p>
+            <p class="tour-date">Дата: 15 марта 2025</p>
+            <p class="tour-duration">Длительность: 10 дней</p>
+        </li>
+        <li class="tour-item">
+            <div class="tour-title">Приключение в Азии</div>
+            <p class="tour-description">Узнайте о удивительных странах Азии, их культуре и природе.</p>
+            <p class="tour-location">Место: Узбекистан, Казакстан</p>
+            <p class="tour-date">Дата: 22 апреля 2025</p>
+            <p class="tour-duration">Длительность: 12 дней</p>
+        </li>
+        <li class="tour-item">
+            <div class="tour-title">Каникулы в Карибах</div>
+            <p class="tour-description">Отдохните на солнечных пляжах Карибских островов.</p>
+            <p class="tour-location">Место: Карибы</p>
+            <p class="tour-date">Дата: 5 июня 2025</p>
+            <p class="tour-duration">Длительность: 7 дней</p>
+        </li>
+        <li class="tour-item">
+            <div class="tour-title">Экспедиция в Антарктиду</div>
+            <p class="tour-description">Проведите время на краю света и увидьте удивительную природу Антарктиды.</p>
+            <p class="tour-location">Место: Антарктида</p>
+            <p class="tour-date">Дата: 1 ноября 2025</p>
+            <p class="tour-duration">Длительность: 14 дней</p>
+        </li>
+        <a href="{% url 'index' %}" class="back-btn">Вернуться на главную</a>
+
+    </div>
+
+</html>

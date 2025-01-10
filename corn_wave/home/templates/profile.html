@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Профиль</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .profile-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .avatar {
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+        }
+        .about {
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+            padding: 10px 15px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .links a:hover {
+            text-decoration: underline;
+            border-color: #4CAF50;
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Добро пожаловать, {{ profile.user.username }}!</h1>
+        {% if profile.image %}
+            <img src="{{ profile.image.url }}" alt="Аватар пользователя" class="avatar" width="150" height="150">
+        {% else %}
+            <p>У вас пока нет аватара.</p>
+        {% endif %}
+        <p class="about">О себе: {{ profile.about|default:"Информация отсутствует." }}</p>
+        <div class="links">
+            <a href="{% url 'profile_edit' %}">Редактировать профиль</a>
+            <a href="{% url 'index' %}">Вернуться на главную страницу</a>
+            <a href="{% url 'user_logout' %}">Выйти</a>
+            <a href="{% url 'cart_view' %}" class="cart-btn">Корзина</a>
+            <a href="{% url 'favorites_view' %}" class="favorites-btn">Избранное</a>
+        </div>
+    </div>
+</body>
+</html>

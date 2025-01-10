@@ -1,0 +1,223 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список треков</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 10px;
+            font-size: 1em;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-btn {
+            padding: 10px 15px;
+            font-size: 1em;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
+        .track-list {
+            list-style: none;
+            padding: 0;
+        }
+        .track-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .track-details {
+            max-width: 70%;
+            display: flex;
+            align-items: center;
+        }
+        .track-image {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+        .track-title-link {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .track-title-link:hover {
+            color: #0056b3;
+        }
+        .track-actions {
+            text-align: right;
+        }
+        .like-btn, .dislike-btn, .cart-btn, .favorite-btn, .delete-btn {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .like-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .like-btn:hover {
+            background-color: #0056b3;
+        }
+        .dislike-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .dislike-btn:hover {
+            background-color: #c82333;
+        }
+        .cart-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .cart-btn:hover {
+            background-color: #218838;
+        }
+        .favorite-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+        .favorite-btn:hover {
+            background-color: #e0a800;
+        }
+        .delete-btn {
+            background-color: #dc3545; /* Червоний для кнопки видалення */
+            color: white;
+        }
+        .delete-btn:hover {
+            background-color: #c82333; /* Темніший червоний при наведенні */
+        }
+        .upload-btn, .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+        }
+        .upload-btn {
+            background-color: #17a2b8;
+        }
+        .upload-btn:hover {
+            background-color: #138496;
+        }
+        .back-btn {
+            background-color: #6c757d;
+            margin-right: 10px;
+        }
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+        .favorite-cart-buttons {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список треков</h1>
+    <a href="{% url 'index' %}" class="back-btn">Вернуться на главную</a>
+    <a href="{% url 'upload_track' %}" class="upload-btn">Загрузить трек</a>
+
+    <form method="get" action="{% url 'search_results' %}" class="search-form">
+        <input type="text" name="q" class="search-input" placeholder="Введите название трека, жанра или исполнителя" value="{{ request.GET.q }}">
+        <button type="submit" class="search-btn">Поиск</button>
+    </form>
+
+    <ul class="track-list">
+        {% for track in tracks %}
+            <li class="track-item">
+                <div class="track-details">
+                    {% if track.photo %}
+                        <img src="{{ track.photo.url }}" alt="Обложка трека {{ track.title }}" class="track-image">
+                    {% endif %}
+                    <div>
+                        <h3 class="track-title">
+                            <a href="{% url 'track_detail' track.id %}" class="track-title-link">
+                                {{ track.title }}
+                            </a>
+                        </h3>
+                        <p class="track-artist">Исполнитель: {{ track.artist.name }}</p>
+                        {% if track.album %}
+                            <p class="track-album">Альбом: {{ track.album.title }}</p>
+                        {% endif %}
+                        <p class="track-genre">Жанр: {{ track.genre.name }}</p>
+                        <p class="track-duration">Длительность: {{ track.duration }}</p>
+
+                        {% if track.audio_file %}
+                            <audio class="track-audio" controls>
+                                <source src="{{ track.audio_file.url }}" type="audio/mpeg">
+                                Ваш браузер не поддерживает аудиоэлемент.
+                            </audio>
+                        {% else %}
+                            <p class="track-missing">Аудиофайл не найден.</p>
+                        {% endif %}
+
+                        <!-- Кнопки добавить в избранное и в корзину -->
+                        <div class="favorite-cart-buttons">
+                            {% if track.user_favorited %}
+                                <a href="{% url 'remove_from_favorites' track.id %}" class="favorite-btn">Убрать из избранного</a>
+                            {% else %}
+                                <a href="{% url 'add_to_favorites' track.id %}" class="favorite-btn">Добавить в избранное</a>
+                            {% endif %}
+                            <a href="{% url 'add_to_cart' track.id %}" class="cart-btn">Добавить в корзину</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="track-actions">
+                    <!-- Лайки -->
+                    <p>Лайков: {{ track.total_likes }}</p>
+                    {% if track.user_liked %}
+                        <a href="{% url 'remove_like' track.id %}" class="like-btn">Убрать лайк</a>
+                    {% else %}
+                        <a href="{% url 'add_like' track.id %}" class="like-btn">Поставить лайк</a>
+                    {% endif %}
+
+                    <p>Дизлайков: {{ track.total_dislikes }}</p>
+                    {% if track.user_disliked %}
+                        <a href="{% url 'remove_dislike' track.id %}" class="dislike-btn">Убрать дизлайк</a>
+                    {% else %}
+                        <a href="{% url 'add_dislike' track.id %}" class="dislike-btn">Поставить дизлайк</a>
+                    {% endif %}
+
+                    <!-- Кнопка удаления трека -->
+                    <div>
+                        <a href="{% url 'delete_track' track.id %}" class="delete-btn" onclick="return confirm('Вы уверены, что хотите удалить этот трек?');">Удалить трек</a>
+                    </div>
+                </div>
+            </li>
+        {% empty %}
+            <li class="no-tracks">Треки не найдены.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
