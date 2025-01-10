@@ -12,11 +12,11 @@ from django.db.models import Q
 
 
 
-import logging
+
 # Create your views here.
 
 
-from django.shortcuts import render
+
 
 
 
@@ -246,7 +246,7 @@ def delete_track(request, track_id):
     if request.method == 'POST':
         track.delete()
         messages.success(request, "Трек успішно видалено!")
-        return redirect('Tracks')  # Змініть на ваше ім'я маршруту для списку треків
+        return redirect('Tracks')  
 
     return render(request, 'confirm_delete.html', {'track': track})
 
